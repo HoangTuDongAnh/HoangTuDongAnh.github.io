@@ -1,0 +1,63 @@
+<aside class="left-sidebar">
+  <div class="sidebar-brand">
+    <a class="brand-link" href="{{ site.baseurl }}/">
+      <span class="brand-mark"></span>
+      <span>
+        <strong>{{ site.heading }}</strong>
+        <small>{{ site.title }}</small>
+      </span>
+    </a>
+  </div>
+
+  <nav class="sidebar-menu" aria-label="Primary">
+    {%- for item in site.menu -%}
+      {%- assign current_url = page.url | remove: 'index.html' -%}
+      {%- assign item_url = item.url | append: '/' | replace: '//', '/' -%}
+      <a href="{{ site.baseurl }}{{ item.url }}" class="sidebar-link{% if current_url == item.url or current_url == item_url %} active{% endif %}">{{ item.title }}</a>
+    {%- endfor -%}
+  </nav>
+
+  <div class="sidebar-section">
+    <p class="sidebar-label">Hierarchy</p>
+    <div class="hierarchy-tree">
+      {%- assign grouped_notes = site.notes | sort: 'path' | group_by_exp: 'note', "note.path | remove: '_notes/' | split: '/' | first" -%}
+      {%- for group in grouped_notes -%}
+        <details class="tree-group" open>
+          <summary>{{ group.name | replace: '-', ' ' }}</summary>
+          <ul>
+            {%- assign child_groups = group.items | group_by_exp: 'note', "note.path | remove: '_notes/' | split: '/' | slice: 1, 1 | first" -%}
+            {%- for child in child_groups -%}
+              {%- if child.name and child.name != blank and child.items.size > 0 -%}
+                {%- assign has_nested = false -%}
+                {%- for child_note in child.items -%}
+                  {%- assign parts = child_note.path | remove: '_notes/' | split: '/' -%}
+                  {%- if parts.size > 2 -%}{%- assign has_nested = true -%}{%- endif -%}
+                {%- endfor -%}
+                {%- if has_nested -%}
+                  <li>
+                    <details open>
+                      <summary>{{ child.name | replace: '-', ' ' }}</summary>
+                      <ul>
+                        {%- for note in child.items -%}
+                          <li>
+                            <a href="{{ site.baseurl }}{{ note.url }}" class="tree-link{% if page.url == note.url %} active{% endif %}">{{ note.title }}</a>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    </details>
+                  </li>
+                {%- else -%}
+                  {%- for note in child.items -%}
+                    <li>
+                      <a href="{{ site.baseurl }}{{ note.url }}" class="tree-link{% if page.url == note.url %} active{% endif %}">{{ note.title }}</a>
+                    </li>
+                  {%- endfor -%}
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        </details>
+      {%- endfor -%}
+    </div>
+  </div>
+</aside>

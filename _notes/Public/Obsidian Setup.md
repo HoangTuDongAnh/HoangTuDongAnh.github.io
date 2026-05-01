@@ -1,7 +1,9 @@
 ---
 title: Obsidian Setup
-feed: show
+feed: hide
 date: 2024-01-15
+
+published: false
 ---
 
 Here's how to set up Jekyll Garden to work seamlessly with Obsidian.

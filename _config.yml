@@ -1,30 +1,32 @@
-# Welcome to Jekyll!
-#
-# This config file is meant for settings that affect your whole blog, values
-# which you are expected to set up once and rarely edit after that. If you find
-# yourself editing this file very often, consider using Jekyll's data files
-# feature for the data you need to update frequently.
-#
-# For technical reasons, this file is *NOT* reloaded automatically when you use
-# 'bundle exec jekyll serve'. If you change this file, please restart the server process.
-#
-# If you need help with YAML syntax, here are some quick references for you: 
-# https://learn-the-web.algonquindesign.ca/topics/markdown-yaml-cheat-sheet/#yaml
-# https://learnxinyminutes.com/docs/yaml/
-#
-# Site settings
-# These are used to personalize your new site. If you look in the HTML files,
-# you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
-# You can create any custom variable you would like, and they will be accessible
-# in the templates via {{ site.myvariable }}.
+# Blog cong nghe ca nhan chay bang Jekyll + GitHub Pages.
+# Neu deploy o repository dang https://username.github.io thi giu baseurl rong.
+# Neu deploy o project repository, GitHub Actions ben duoi se tu gan baseurl theo Pages.
 
-# Jekyll Garden Configuration
-# Optimized for actual template usage
+lang: "vi"
+timezone: "Asia/Ho_Chi_Minh"
+title: "Blog Công nghệ của Hoàng"
+heading: "Hoàng"
+description: "Ghi chú, bài viết và hướng dẫn thực chiến về AI, prompt engineering, phát triển phần mềm và cách xây dựng blog cá nhân bằng Jekyll."
+url: "https://hoangtudonganh.github.io"
+baseurl: ""
 
-# Preferences (controls template behavior)
+# Thong tin tac gia hien thi trong layout va feed.
+author:
+  name: "Hoàng"
+  bio: "Blogger công nghệ, ghi chú bằng Obsidian và xuất bản bằng Jekyll/GitHub Pages."
+  url: "https://hoangtudonganh.github.io/about"
+
+# Asset Configuration
+favicon: "/assets/img/favicon.svg"
+apple_touch_icon: "/assets/img/icon-192.svg"
+og_image: "/assets/img/og-image.svg"
+css_file: "/assets/css/style.css"
+ie_css: "/assets/css/ie-target.css"
+
+# Preferences
 preferences:
   homepage:
-    enabled: false
+    enabled: true
   search:
     enabled: true
   backlinks:
@@ -34,30 +36,22 @@ preferences:
   wiki_style_link:
     enabled: true
 
-# Site Configuration
-title: "Your Site Title"
-heading: "Your Name"
-description: "A brief description of your site"
-url: "https://hoangtudonganh.github.io"
-baseurl: ""
-
-# Asset Configuration
-apple_touch_icon: "/assets/img/profile.png"
-css_file: "/assets/css/style.css"
-ie_css: "/assets/css/ie-target.css"
-
 # Menu Items
 menu:
-  - title: "Notes"
-    url: "/notes"
+  - title: "Trang chủ"
+    url: "/"
   - title: "Blog"
     url: "/blog"
-  - title: "About"
+  - title: "Ghi chú"
+    url: "/notes"
+  - title: "Tags"
+    url: "/tags"
+  - title: "Giới thiệu"
     url: "/about"
 
 # Footer
 footer:
-  copyright: "© 2024 Your Name. Contents under CC-BY-NC"
+  copyright: "© 2026 Hoàng. Nội dung chia sẻ cho mục đích học tập và tham khảo."
   credits:
     enabled: true
     url: "/credits"
@@ -67,9 +61,10 @@ footer:
 collections:
   notes:
     output: true
-    permalink: /:collection/:name
+    permalink: /:collection/:name/
 
 # Defaults
+# Jekyll se ap dung nhung gia tri nay cho notes/posts de ban khong can lap lai front matter.
 defaults:
   - scope:
       path: ""
@@ -85,20 +80,38 @@ defaults:
       layout: "Post"
       content-type: "post"
       feed: "show"
+      author: "Hoàng"
       permalink: /blog/:title/
+  - scope:
+      path: "pages"
+      type: "pages"
+    values:
+      layout: "Post"
+      content-type: "static"
 
-# Plugins
+# Markdown / syntax highlight
+markdown: kramdown
+highlighter: rouge
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  math_engine: katex
+
+# RSS, sitemap
 plugins:
   - jekyll-feed
   - jekyll-sitemap
 
 # Private links (for broken wiki links)
 privatelinks:
-  title: "Private Note"
-  msg: "This note hasn't been published yet."
+  title: "Nội dung chưa xuất bản"
+  msg: "Ghi chú hoặc bài viết này chưa được public."
 
-# Math rendering
+# Math rendering CSS
 katex: true
+
+# Search/excerpt
+excerpt_separator: "<!--more-->"
 
 # Exclude from processing
 exclude:
@@ -109,3 +122,17 @@ exclude:
   - vendor/cache/
   - vendor/gems/
   - vendor/ruby/
+  - .bundle/
+  - .sass-cache/
+  - .jekyll-cache/
+  - .git/
+  - .github/
+  - .obsidian/
+  - _site/
+  - utilities/
+  - Dockerfile
+  - docker-compose.yml
+  - debug.yml
+  - blog.code-workspace
+  - README.md
+  - "*.DS_Store"

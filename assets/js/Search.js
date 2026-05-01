@@ -74,7 +74,8 @@
     }
 
     function searchInit() {
-        var dataUrl = "/SearchData.json";
+        var dataScript = document.querySelector('script[data-search-json]');
+        var dataUrl = dataScript ? dataScript.getAttribute('data-search-json') : '/SearchData.json';
 
         getSearchData(dataUrl)
             .then(function(responseText) {
@@ -169,7 +170,7 @@
             if (results.length == 0) {
                 var noResultsDiv = document.createElement('div');
                 noResultsDiv.classList.add('search-no-result');
-                noResultsDiv.innerText = 'No results found';
+                noResultsDiv.innerText = 'Không tìm thấy kết quả';
                 searchResults.appendChild(noResultsDiv);
             } else {
                 var resultsList = document.createElement('ul');
@@ -218,7 +219,7 @@
                 
                 if (doc.doc != doc.title) {
                     
-                    resultDoc.classList.add('search-result-doc-parent');
+                    resultDocTitle.classList.add('search-result-doc-parent');
                     var resultSection = document.createElement('div');
                     resultSection.classList.add('search-result-section');
                     resultSection.innerHTML = doc.title;

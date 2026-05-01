@@ -1,7 +1,9 @@
 ---
 title: Getting Started
-feed: show
+feed: hide
 date: 2024-01-15
+
+published: false
 ---
 
 Jekyll Garden makes it easy to turn your Obsidian notes into a website. Here's how to get started:

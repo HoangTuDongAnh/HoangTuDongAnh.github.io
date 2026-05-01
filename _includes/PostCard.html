@@ -1,0 +1,17 @@
+{%- assign item = include.item -%}
+<article class="post-card">
+  <a class="post-card-link" href="{{ item.url | relative_url }}">
+    <div class="post-card-body">
+      <p class="post-card-date">{{ item.date | date: "%d/%m/%Y" }}</p>
+      <h2>{{ item.title }}</h2>
+      <p>{{ item.description | default: item.excerpt | strip_html | normalize_whitespace | truncate: 180 }}</p>
+    </div>
+  </a>
+  {%- if item.tags and item.tags.size > 0 -%}
+  <div class="tag-row compact">
+    {%- for tag in item.tags limit: 4 -%}
+      <a class="tag-pill" href="{{ '/tags' | relative_url }}#{{ tag | slugify }}">#{{ tag }}</a>
+    {%- endfor -%}
+  </div>
+  {%- endif -%}
+</article>

@@ -1,6 +1,6 @@
 <aside class="left-sidebar">
   <div class="sidebar-brand">
-    <a class="brand-link" href="{{ site.baseurl }}/">
+    <a class="brand-link" href="{{ '/' | relative_url }}">
       <span class="brand-mark"></span>
       <span>
         <strong>{{ site.heading }}</strong>
@@ -11,16 +11,35 @@
 
   <nav class="sidebar-menu" aria-label="Primary">
     {%- for item in site.menu -%}
-      {%- assign current_url = page.url | remove: 'index.html' -%}
+      {%- assign current_url = page.url | remove: 'index.html' | replace: '//', '/' -%}
       {%- assign item_url = item.url | append: '/' | replace: '//', '/' -%}
-      <a href="{{ site.baseurl }}{{ item.url }}" class="sidebar-link{% if current_url == item.url or current_url == item_url %} active{% endif %}">{{ item.title }}</a>
+      <a href="{{ item.url | relative_url }}" class="sidebar-link{% if current_url == item.url or current_url == item_url %} active{% endif %}">{{ item.title }}</a>
     {%- endfor -%}
   </nav>
 
+  <div class="sidebar-section latest-posts">
+    <p class="sidebar-label">Bài mới</p>
+    <ul class="sidebar-list">
+      {%- assign recent_posts = site.posts | sort: 'date' | reverse -%}
+      {%- for post in recent_posts limit: 5 -%}
+        {%- if post.feed != 'hide' -%}
+        <li>
+          <a href="{{ post.url | relative_url }}" class="tree-link{% if page.url == post.url %} active{% endif %}">
+            <span>{{ post.title }}</span>
+            <small>{{ post.date | date: "%d/%m/%Y" }}</small>
+          </a>
+        </li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+  </div>
+
+  {%- assign public_notes = site.notes | where_exp: 'note', "note.feed != 'hide'" -%}
+  {%- if public_notes.size > 0 -%}
   <div class="sidebar-section">
-    <p class="sidebar-label">Hierarchy</p>
+    <p class="sidebar-label">Ghi chú</p>
     <div class="hierarchy-tree">
-      {%- assign grouped_notes = site.notes | sort: 'path' | group_by_exp: 'note', "note.path | remove: '_notes/' | split: '/' | first" -%}
+      {%- assign grouped_notes = public_notes | sort: 'path' | group_by_exp: 'note', "note.path | remove: '_notes/' | split: '/' | first" -%}
       {%- for group in grouped_notes -%}
         <details class="tree-group" open>
           <summary>{{ group.name | replace: '-', ' ' }}</summary>
@@ -39,18 +58,14 @@
                       <summary>{{ child.name | replace: '-', ' ' }}</summary>
                       <ul>
                         {%- for note in child.items -%}
-                          <li>
-                            <a href="{{ site.baseurl }}{{ note.url }}" class="tree-link{% if page.url == note.url %} active{% endif %}">{{ note.title }}</a>
-                          </li>
+                          <li><a href="{{ note.url | relative_url }}" class="tree-link{% if page.url == note.url %} active{% endif %}">{{ note.title }}</a></li>
                         {%- endfor -%}
                       </ul>
                     </details>
                   </li>
                 {%- else -%}
                   {%- for note in child.items -%}
-                    <li>
-                      <a href="{{ site.baseurl }}{{ note.url }}" class="tree-link{% if page.url == note.url %} active{% endif %}">{{ note.title }}</a>
-                    </li>
+                    <li><a href="{{ note.url | relative_url }}" class="tree-link{% if page.url == note.url %} active{% endif %}">{{ note.title }}</a></li>
                   {%- endfor -%}
                 {%- endif -%}
               {%- endif -%}
@@ -60,4 +75,5 @@
       {%- endfor -%}
     </div>
   </div>
+  {%- endif -%}
 </aside>

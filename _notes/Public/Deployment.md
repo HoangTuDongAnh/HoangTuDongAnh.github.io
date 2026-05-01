@@ -1,7 +1,9 @@
 ---
 title: Deployment
-feed: show
+feed: hide
 date: 2024-01-15
+
+published: false
 ---
 
 Once you've set up your Jekyll Garden site, here's how to publish it online.

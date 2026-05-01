@@ -1,7 +1,9 @@
 ---
 title: Customization
-feed: show
+feed: hide
 date: 2024-01-15
+
+published: false
 ---
 
 You can customize your Jekyll Garden site by editing a few key files.

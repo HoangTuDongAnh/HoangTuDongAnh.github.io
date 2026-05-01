@@ -1,43 +1,42 @@
-<div class="footer">
+<footer class="footer">
   <div class="footer-left">
-    <h6>
+    <h2 class="sr-only">Footer</h2>
+    <p>
       {{ site.footer.copyright }}
       {%- if site.footer.credits.enabled -%}
-          • <a href="{{ site.baseurl }}{{ site.footer.credits.url }}">{{ site.footer.credits.text }}</a>
+          • <a href="{{ site.footer.credits.url | relative_url }}">{{ site.footer.credits.text }}</a>
       {%- endif -%}
-    </h6>
+    </p>
   </div>
   <div class="footer-right">
-    <button class="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
-      <svg viewBox="0 0 14 14" width="14" height="14" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <button class="theme-toggle" aria-label="Đổi giao diện sáng/tối" title="Đổi giao diện sáng/tối">
+      <svg viewBox="0 0 14 14" width="14" height="14" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <circle cx="7" cy="7" r="5"/>
       </svg>
     </button>
   </div>
-</div>
+</footer>
 
 <script>
-  // Theme toggle
-  const themeToggle = document.querySelector('.theme-toggle');
-  const root = document.documentElement;
-  const body = document.body;
-  
-  function setTheme(theme) {
-    root.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
-  }
-  
-  // Initial theme
-  const savedTheme = localStorage.getItem('theme');
-  if (savedTheme) {
-    setTheme(savedTheme);
-  }
-  
-  themeToggle.addEventListener('click', function() {
-    root.classList.add('theme-transition');
-    body.classList.add('theme-transition');
-    
-    const isDark = root.getAttribute('data-theme') === 'dark';
-    setTheme(isDark ? 'light' : 'dark');
+  document.addEventListener('DOMContentLoaded', function() {
+    const themeToggle = document.querySelector('.theme-toggle');
+    const root = document.documentElement;
+    const body = document.body;
+    if (!themeToggle) return;
+
+    function setTheme(theme) {
+      root.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+    }
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) setTheme(savedTheme);
+
+    themeToggle.addEventListener('click', function() {
+      root.classList.add('theme-transition');
+      body.classList.add('theme-transition');
+      const isDark = root.getAttribute('data-theme') === 'dark';
+      setTheme(isDark ? 'light' : 'dark');
+    });
   });
 </script>

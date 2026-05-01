@@ -1,7 +1,9 @@
 ---
 title: Markdown Guide
-feed: show
+feed: hide
 date: 2024-01-15
+
+published: false
 ---
 
 This guide shows the essential markdown formatting you can use in your notes.

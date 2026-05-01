@@ -1,7 +1,9 @@
 ---
 title: Theme Features
-feed: show
+feed: hide
 date: 2024-01-15
+
+published: false
 ---
 
 Jekyll Garden comes with several features that make it easy to create and navigate your digital garden.

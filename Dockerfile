@@ -1,16 +1,13 @@
-FROM ruby:3.1.1-alpine3.15
+FROM ruby:3.3-alpine
 
-RUN apk add --no-cache build-base nodejs-current
-
-RUN gem install bundler
+RUN apk add --no-cache build-base git nodejs
 
 WORKDIR /usr/src/app
 
-COPY . /usr/src/app
-
+COPY Gemfile Gemfile.lock ./
 RUN bundle install
 
-CMD ["bundle", "exec", "jekyll", "serve", "--host", "0.0.0.0"]
+COPY . ./
 
 EXPOSE 4000
-
+CMD ["bundle", "exec", "jekyll", "serve", "--host", "0.0.0.0", "--livereload"]

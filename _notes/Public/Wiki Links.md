@@ -1,7 +1,9 @@
 ---
 title: Wiki Links
-feed: show
+feed: hide
 date: 2024-01-15
+
+published: false
 ---
 
 Wiki links let you connect your notes using double brackets, like `[[Note Title]]`. This works exactly like linking notes in Obsidian.

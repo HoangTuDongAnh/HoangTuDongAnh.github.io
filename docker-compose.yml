@@ -1,23 +1,15 @@
-version: "3"
-
-networks:
-  jekyll:
-    external: false
-
 services:
-  garden:
+  blog:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: jekyll
-    restart: always
-    networks:
-      - jekyll
+    container_name: jekyll-blog
     volumes:
-      - ./_posts:/usr/src/app/_posts
-      - ./_notes:/usr/src/app/_notes
-      - ./assets:/usr/src/app/assets
-      - ./pages:/usr/src/app/pages
+      - .:/usr/src/app
+      - bundle-cache:/usr/local/bundle
     ports:
       - "4000:4000"
+    command: bundle exec jekyll serve --host 0.0.0.0 --livereload
 
+volumes:
+  bundle-cache:

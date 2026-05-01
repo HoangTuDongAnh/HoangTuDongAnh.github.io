@@ -1,52 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ site.lang | default: 'vi' }}">
 
 <head>
+    <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1" name="viewport" />
+    {%- assign page_description = page.description | default: page.excerpt | default: site.description | strip_html | normalize_whitespace | truncate: 180 -%}
+    <meta name="description" content="{{ page_description }}">
+    <meta name="author" content="{{ page.author | default: site.author.name | default: site.heading }}">
     <meta content="{{ site.title | default: site.heading }}" property="og:site_name" />
-    <meta content="{{ site.description | default: 'A Jekyll Garden site' }}" property="og:description">
-    <meta content="{{ site.url }}/about/" property="article:author">
-    {%- if site.og_image -%}
-    <meta property="og:image" content="{{ site.baseurl }}{{ site.og_image }}">
+    <meta content="{{ page_description }}" property="og:description">
+    <meta content="{{ page.title | default: site.title }}" property="og:title">
+    <meta content="{{ page.url | absolute_url }}" property="og:url">
+    {%- if page.content-type == "post" -%}
+    <meta content="article" property="og:type">
+    {%- if page.date -%}<meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">{%- endif -%}
+    {%- if page.categories -%}{%- for category in page.categories -%}<meta property="article:section" content="{{ category }}">{%- endfor -%}{%- endif -%}
+    {%- if page.tags -%}{%- for tag in page.tags -%}<meta property="article:tag" content="{{ tag }}">{%- endfor -%}{%- endif -%}
+    {%- else -%}
+    <meta content="website" property="og:type">
+    {%- endif -%}
+    {%- assign og_image = page.image | default: site.og_image -%}
+    {%- if og_image -%}
+    <meta property="og:image" content="{{ og_image | absolute_url }}">
     {%- endif -%}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-    {%- if page.title -%}
-    <meta content="{{ page.title }}" property="og:title">
-    <meta content="article" property="og:type">
-    <meta content="{{ site.url }}{{ page.url }}" property="og:url">
-    {%- else -%}
-    <meta content="website" property="og:type">
-    <meta content="{{ site.url }}{{ page.url }}" property="og:url">
-    {%- endif -%}
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <title>{%- if page.title -%}{{ page.title }} - {%- endif -%}{{ site.heading }}</title>
-    <link rel="canonical" href="{{site.url}}{{page.url}}" />
+    <title>{%- if page.title -%}{{ page.title }} - {%- endif -%}{{ site.title }}</title>
+    <link rel="canonical" href="{{ page.url | absolute_url }}" />
     {%- if site.apple_touch_icon -%}
-    <link rel="apple-touch-icon" href="{{ site.baseurl }}{{ site.apple_touch_icon }}">
+    <link rel="apple-touch-icon" href="{{ site.apple_touch_icon | relative_url }}">
     {%- endif -%}
     {%- if site.favicon -%}
-    <link rel="icon" href="{{ site.baseurl }}{{ site.favicon }}" type="image/svg+xml" sizes="any" />
+    <link rel="icon" href="{{ site.favicon | relative_url }}" type="image/svg+xml" sizes="any" />
     {%- endif -%}
     {%- if site.css_file -%}
-    <link href="{{ site.baseurl }}{{ site.css_file }}" rel="stylesheet" media="all" class="default" />
+    <link href="{{ site.css_file | relative_url }}" rel="stylesheet" media="all" class="default" />
     {%- else -%}
-    <link href="{{ site.baseurl }}/assets/css/style.css" rel="stylesheet" media="all" class="default" />
+    <link href="{{ '/assets/css/style.css' | relative_url }}" rel="stylesheet" media="all" class="default" />
     {%- endif -%}
     {%- if site.katex -%}
-    <link href="{{ site.baseurl }}/assets/css/vendor/Katex.css" rel="stylesheet" media="all" class="default" />
+    <link href="{{ '/assets/css/vendor/Katex.css' | relative_url }}" rel="stylesheet" media="all" class="default" />
     {%- endif -%}
-
     <!--[if IE]>
         {%- if site.ie_css -%}
-        <link href="{{ site.baseurl }}{{ site.ie_css }}" rel="stylesheet" type="text/css"/>
+        <link href="{{ site.ie_css | relative_url }}" rel="stylesheet" type="text/css"/>
         {%- else -%}
-        <link href="{{ site.baseurl }}/assets/css/ie-target.css" rel="stylesheet" type="text/css"/>
+        <link href="{{ '/assets/css/ie-target.css' | relative_url }}" rel="stylesheet" type="text/css"/>
         {%- endif -%}
     <![endif]-->
-    <!--<link href="/assets/css/prism.css" rel="stylesheet" />-->
-    <link rel="alternate" type="application/rss+xml" href="{{ site.url }}/feed.xml">
+    <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ '/feed.xml' | relative_url }}">
 </head>
 
 <body>
@@ -56,62 +60,63 @@
             <div class="container">
                 <div>
                     {%- include Nav.html -%}
-                    
-                    <!-- Homepage Layout-->
+
+                    <!-- Homepage Layout -->
                     {%- if page.permalink == "/" -%}
                         {%- if site.preferences.homepage.enabled -%}
                             {%- include Content.html -%}
                         {%- else -%}
-                            <h1>{{page.title}}</h1>
+                            <h1>{{ page.title }}</h1>
                             {%- include Content.html -%}
                             {%- include Search.html -%}
                             {%- include Feed.html -%}
                         {%- endif -%}
                     {%- endif -%}
 
-                    <!--- Notes Feed Layout-->
+                    <!-- Notes Feed Layout -->
                     {%- if page.permalink == "/notes" -%}
-                        <h1>{{page.title}}</h1>
+                        <h1>{{ page.title }}</h1>
                         {%- include Content.html -%}
                         {%- include Search.html -%}
                         {%- include Feed.html -%}
                     {%- endif -%}
 
-                    <!--- Notes Layout-->
+                    <!-- Notes Layout -->
                     {%- if page.content-type == "notes" -%}
-                        <h1>{{page.title}}</h1>
+                        <h1>{{ page.title }}</h1>
                         {%- include Content.html -%}
                         {%- if site.preferences.backlinks.enabled -%}
                         {%- include Backlinks.html -%}
                         {%- endif -%}
                     {%- endif -%}
 
-                     <!--- Post Layout-->
-                     {%- if page.content-type == "post"  -%}
-                         <h1>{{page.title}}</h1>
-                         {%- include Content.html -%}
-                         {%- if site.preferences.backlinks.enabled -%}
-                         {%- include Backlinks.html -%}
-                         {%- endif -%}
-                     {%- endif -%}
+                    <!-- Blog Post Layout -->
+                    {%- if page.content-type == "post" -%}
+                        <article class="post-single">
+                            <header class="post-header">
+                                <p class="eyebrow">Blog</p>
+                                <h1>{{ page.title }}</h1>
+                                {%- include PostMeta.html item=page -%}
+                            </header>
+                            {%- include Content.html -%}
+                        </article>
+                    {%- endif -%}
 
-                    <!--- Static Page Layout-->
-                    {%- if page.content-type == "static" -%}
-                        <h1>{{page.title}}</h1>                        
+                    <!-- Static Page Layout -->
+                    {%- if page.content-type == "static" and page.permalink != "/blog" and page.permalink != "/notes" -%}
+                        <h1>{{ page.title }}</h1>
                         {%- include Content.html -%}
                     {%- endif -%}
-                    
-                    <!--- Blog Feed Layout-->
+
+                    <!-- Blog Feed Layout -->
                     {%- if page.permalink == "/blog" -%}
-                        <div class="related-wrapper">
-                        {% assign post_items = site.posts | sort: "date" | reverse %}
-                        {% for post_items in post_items %}
-                            {%- if post_items.feed == "show" -%}
-                                    <div class="notelist-feed">
-                                        <a href="{{ site.baseurl }}{{post_items.url}}">
-                                            <p>{{ post_items.title }}</p>
-                                        </a>
-                                    </div>
+                        <h1>{{ page.title }}</h1>
+                        {%- include Content.html -%}
+                        <div class="post-list">
+                        {%- assign post_items = site.posts | sort: "date" | reverse -%}
+                        {%- for post in post_items -%}
+                            {%- if post.feed != "hide" -%}
+                                {%- include PostCard.html item=post -%}
                             {%- endif -%}
                         {%- endfor -%}
                         </div>
@@ -138,6 +143,8 @@
         headings.forEach((heading, index) => {
           if (!heading.id) {
             heading.id = heading.textContent.trim().toLowerCase()
+              .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+              .replace(/đ/g, 'd').replace(/Đ/g, 'd')
               .replace(/[^a-z0-9\s-]/g, '')
               .replace(/\s+/g, '-') + '-' + index;
           }
@@ -170,4 +177,4 @@
       });
     </script>
 </body>
-</html> 
+</html>

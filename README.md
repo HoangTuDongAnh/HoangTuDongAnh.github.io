@@ -1,93 +1,130 @@
-# Jekyll Garden
-![screenshot](https://github.com/user-attachments/assets/f5752b1a-eb11-4385-a2ad-09f0e698ad30)
-A simple Jekyll theme that turns your Obsidian notes into a beautiful website. Perfect for sharing your thoughts and knowledge online. If you use Obsidian for note-taking, this theme makes it easy to publish your markdown files as a connected website with wiki-style links and full-text search.
+# Blog Công nghệ của Hoàng
 
+Đây là source blog cá nhân dùng **Jekyll + GitHub Pages + GitHub Actions**, tối ưu cho workflow viết bài bằng **Obsidian** và Markdown.
 
-### What it does
+## 1. Cấu trúc quan trọng
 
-Jekyll Garden connects your notes together with simple `[[note title]]` links, just like in Obsidian. You can find any note quickly with the built-in search that works as you type. The design focuses on your content with a clean, minimal look that works great on phones, tablets, and computers. Choose between dark and light themes, and when you want to write traditional blog posts, you can do that too. The theme also supports mathematical expressions if you need to write equations.
-
-## Getting Started
-
-Getting started is straightforward. First, download this theme to your computer. Then edit the settings in the `_config.yml` file with your website information. Add your notes to the `_notes` folder, and finally deploy to GitHub Pages, Netlify, or any web hosting service.
-
-## Basic Setup
-
-Edit `_config.yml` with your information:
-
-```yaml
-title: "My Website"
-heading: "Your Name"
-description: "A brief description of your site"
-url: "https://yoursite.com"
+```text
+.
+├── _config.yml              # cấu hình site, menu, SEO, collection, permalink
+├── _posts/                  # bài blog có ngày xuất bản
+├── _notes/                  # ghi chú/digital garden từ Obsidian
+├── pages/                   # trang tĩnh: home, blog, tags, about...
+├── _layouts/Post.html       # layout chính
+├── _includes/               # các khối tái sử dụng: sidebar, search, post card...
+├── assets/css/style.css     # giao diện
+├── assets/js/Search.js      # tìm kiếm client-side bằng Lunr
+├── SearchData.json          # dữ liệu search được Jekyll render khi build
+└── .github/workflows/       # GitHub Actions deploy lên Pages
 ```
 
-### Deployment Options
+## 2. Chạy local
 
-You can deploy your site to a subdomain (like `notes.yoursite.com`) or a subdirectory (like `yoursite.com/notes`):
+Cài Ruby và Bundler, sau đó chạy:
 
-**For subdomains:**
-```yaml
-url: "https://notes.yoursite.com"
-baseurl: ""
+```bash
+bundle install
+bundle exec jekyll serve
 ```
 
-**For subdirectories:**
-```yaml
-url: "https://yoursite.com"
-baseurl: "/notes"
+Mở trình duyệt tại:
+
+```text
+http://localhost:4000
 ```
 
-See `SUBDOMAIN_SETUP.md` for more details.
+Khi đổi `_config.yml`, hãy dừng server và chạy lại `bundle exec jekyll serve`.
 
-## Writing Notes
+## 3. Viết bài blog
 
-### Creating a Note
+Bài blog nằm trong `_posts/` và tên file **bắt buộc** theo dạng:
 
-Each note is just a markdown file with a title. You write your content in markdown format, just like you would in Obsidian or any other markdown editor.
+```text
+YYYY-MM-DD-ten-bai-viet.md
+```
+
+Ví dụ:
+
+```text
+_posts/2026-05-01-cach-dung-jekyll-voi-obsidian.md
+```
+
+Front matter mẫu:
 
 ```yaml
 ---
-title: "My First Note"
-date: 2025-01-15
+title: "Cách dùng Jekyll với Obsidian"
+description: "Quy trình biến ghi chú Markdown trong Obsidian thành blog tĩnh bằng Jekyll."
+date: 2026-05-01
+author: "Hoàng"
+categories:
+  - Jekyll
+  - Blogging
+tags:
+  - jekyll
+  - obsidian
+  - github-pages
+feed: show
 ---
 ```
 
-## Features
+## 4. Viết ghi chú từ Obsidian
 
-### Linking Notes Together
-Connect your notes by using `[[note title]]` to link to other notes. This creates the same kind of connections you're used to in Obsidian, but now they work on your website too.
+Ghi chú nằm trong `_notes/`. Mỗi note nên có front matter:
 
+```yaml
+---
+title: "Tên ghi chú"
+date: 2026-05-01
+feed: show
+---
+```
 
-### Simple Linking
-The linking system works just like Obsidian. Write `[[note title]]` and the links are created automatically. When you hover over a link, you'll see a preview of the connected note.
+Bạn có thể dùng wiki link giống Obsidian:
 
-### Search
-Finding content is easy with the built-in search. It searches through all your notes instantly as you type, looking at both titles and content to help you find exactly what you need.
+```markdown
+Đọc thêm [[Thiết kế một prompt tốt]] hoặc [[Jekyll::https://jekyllrb.com]].
+```
 
-### Backlinks
-See which notes link to the current one you're reading. This helps you discover related content and explore the connections between your ideas, just like the backlinks feature in Obsidian.
+Alias cũng được hỗ trợ:
 
-### Math
-If you need to write mathematical expressions, the theme supports it. Use `$x = y$` for inline math and `$$\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}$$` for complex equations.
+```markdown
+[[Thiết kế một prompt tốt|bài hướng dẫn prompt]]
+```
 
-## How to Publishing Your Site
+Embed ảnh kiểu Obsidian:
 
-### GitHub Pages (Free)
-GitHub Pages is the easiest way to get started. Upload your files to GitHub, enable GitHub Pages in the repository settings, and your site goes live automatically.
+```markdown
+![[assets/img/posts/demo.png]]
+```
 
-### Netlify (Free)
-Netlify is another great option. Connect your GitHub repository to Netlify, and it will build and host your site. Every time you update your files, your site updates automatically.
+Nên đặt ảnh trong `assets/img/posts/` để dễ quản lý.
 
-### Local Testing
-Test your site locally before publishing. Run `bundle install` to install dependencies, then `bundle exec jekyll serve` to start a local server and see your site in action.
+## 5. Deploy lên GitHub Pages
 
-### Customization
-Change the look of your site by editing the `assets/css/style.css` file. You can modify colors, fonts, and other visual elements to match your preferences. If you want to customize the layout, you can modify files in the `_layouts/` folder. Add your own CSS and JavaScript as needed, but remember to keep it simple.
+Workflow nằm tại `.github/workflows/jekyll.yml`. Mỗi khi push lên branch `main`, GitHub Actions sẽ:
 
-## Contributing
-Found a bug or have an idea for improvement? Contributions are welcome. Fork the repository, make your changes, and submit a pull request.
+1. Checkout source.
+2. Setup Ruby.
+3. Cài gem bằng Bundler cache.
+4. Build Jekyll.
+5. Upload `_site` làm Pages artifact.
+6. Deploy lên GitHub Pages.
 
-## License
+Trong GitHub repository, vào **Settings → Pages** và chọn **Build and deployment → Source: GitHub Actions**.
 
-MIT License - use it freely for any project.
+## 6. Tùy chỉnh nhanh
+
+- Đổi tên blog, mô tả, URL: sửa `_config.yml`.
+- Đổi menu: sửa `menu:` trong `_config.yml`.
+- Đổi màu/font/layout: sửa `assets/css/style.css`.
+- Đổi trang giới thiệu: sửa `pages/about.md`.
+- Đổi trang chủ: sửa `pages/index.md`.
+
+## 7. Checklist trước khi publish
+
+- File bài viết trong `_posts/` có dạng `YYYY-MM-DD-slug.md`.
+- Mỗi bài có `title`, `description`, `date`, `categories`, `tags`.
+- Ảnh không để rải rác ở root, ưu tiên `assets/img/posts/`.
+- Không commit `_site/`, `.jekyll-cache/`, `.DS_Store`, workspace riêng của Obsidian.
+- Build local không báo lỗi trước khi push.

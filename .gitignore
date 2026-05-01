@@ -1,6 +1,24 @@
-_site
-.jekyll-cache
-pages/.DS_Store
-pages/tags.md
-_notes/.obsidian
-_notes/Public/.obsidian
+# Jekyll build/cache
+_site/
+.jekyll-cache/
+.sass-cache/
+.bundle/
+vendor/
+
+# OS/editor noise
+.DS_Store
+**/.DS_Store
+Thumbs.db
+
+# Obsidian local state and heavy community plugins
+.obsidian/workspace.json
+.obsidian/plugins/
+.trash/
+
+# Private notes/drafts you do not want to publish
+_notes/Private/
+_drafts/private/
+
+# Local tooling
+node_modules/
+*.log
